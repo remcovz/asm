@@ -46,7 +46,7 @@ line2    !scr "       ]]] charset demo by tw ]]]       "
 line3    !scr "bla, bla...                             "
 
 * = char_ram
-; custom characeter set.
+; custom character set.
 ; -------------
 !byte %00011100
 !byte %00100010

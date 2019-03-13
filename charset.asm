@@ -3,7 +3,7 @@
 !sl "labels.txt"
 
 char_ram                = $3000
-char_ram_bits           = char_ram / $400 ; $0c
+char_ram_bits           = char_ram / $400 ; $0c (00001100)
 
 * = $0801
 !byte $0b,$08,$e3,$07,$9e,$32,$30,$36,$31 ; 2019 SYS2061
@@ -15,31 +15,31 @@ start:
            sta $d018
 
            lda $d016      ; turn off multicolor for characters
-           and #$ef       ; by cleaning Bit#4 of $D016
+           and #$ef       ; (11101111) by cleaning Bit#4 of $D016
            sta $d016
 
 loop_text:
            lda line1,x      ; read characters from line1 table of text...
            sta $05e0,x      ; ...and store in screen ram near the center
-           lda line2,x      ; read characters from line1 table of text...
-           sta $0630,x      ; ...and put 2 rows below line1
-           lda line3,x      ; read characters from line1 table of text...
-           sta $0770,x      ; ...and put 2 rows below line1
+           lda line2,x      ; read characters from line2 table of text...
+           sta $0630,x      ; ...and put below line1
+           lda line3,x      ; read characters from line3 table of text...
+           sta $0770,x      ; ...and put below line2
            inx
            cpx #$28         ; finished when all 40 cols of a line are processed
            bne loop_text
 
            lda #$00
 	   ldx #$00
-showall    sta $0400,x      ; screen ram
+showall    sta $0400,x      ; print the whole charset on screen
            inx
            txa
            cpx #$00
            bne showall
 
-           inc $d020
-           jmp start
-           rts
+           inc $d020        ; increase bordercolor
+           jmp start        ; start over, comment out..
+           rts              ; if you want to go back to basic
 
 line1    !scr "]]]     the wanderer presents        ]]]"
 line2    !scr "       ]]] charset demo by tw ]]]       "

@@ -1,5 +1,5 @@
 !cpu 6510
-!to "charsets.prg",cbm    ; output file
+!to "charset.prg",cbm    ; output file
 !sl "labels.txt"
 
 char_ram                = $3000

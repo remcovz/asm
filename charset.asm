@@ -38,7 +38,7 @@ showall    sta $0400,x      ; print the character a on screenposition x
            bne showall      ; if not, print and repeat
 
            inc $d020        ; increase bordercolor
-           jmp start        ; start over, comment out ...
+           jmp start        ; start over, or comment out ...
            rts              ; ... if you want to go back to basic
 
 ; lines should be 40 cols wide (c64 screenwidth)

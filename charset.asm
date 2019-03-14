@@ -7,7 +7,7 @@ char_ram_bits           = char_ram / $400 ; $0c (00001100)
 
 * = $0801
 !byte $0b,$08,$e3,$07,$9e,$32,$30,$36,$31 ; 2019 SYS2061
-!byte $00,$00,$00
+!byte $00,$00,$00                         ; EOB (End Of Basic)
 
 start:
            lda $d018          ; Memory setup register. 

@@ -1,5 +1,5 @@
 !cpu 6510
-!to "charsets.prg",cbm    ; output file
+!to "charset.prg",cbm    ; output file
 !sl "labels.txt"
 
 char_ram                = $3000
@@ -7,10 +7,10 @@ char_ram_bits           = char_ram / $400 ; $0c (00001100)
 
 * = $0801
 !byte $0b,$08,$e3,$07,$9e,$32,$30,$36,$31 ; 2019 SYS2061
-!byte $00,$00,$00
+!byte $00,$00,$00                         ; EOB (End Of Basic)
 
 start:
-           lda $d018      ; Memory setup register. 
+           lda $d018          ; Memory setup register. 
            ora #char_ram_bits ; bits 1-3 %110, $3000-$37FF, 12288-14335.
            sta $d018
 
@@ -25,24 +25,25 @@ loop_text:
            sta $0630,x      ; ...and put below line1
            lda line3,x      ; read characters from line3 table of text...
            sta $0770,x      ; ...and put below line2
-           inx
-           cpx #$28         ; finished when all 40 cols of a line are processed
-           bne loop_text
+           inx              ; increase x (line column position)
+           cpx #$28         ; compare to 40 (rightmost column)
+           bne loop_text    ; finished when all 40 cols of a line are processed
 
-           lda #$00
-	   ldx #$00
-showall    sta $0400,x      ; print the whole charset on screen
-           inx
-           txa
-           cpx #$00
-           bne showall
+           lda #$00         ; a = character
+           ldx #$00         ; x = counter
+showall    sta $0400,x      ; print the character a on screenposition x
+           inx              ; increase x
+           txa              ; x => a (a = x)
+           cpx #$00         ; check if x has rolled from 255 to 0
+           bne showall      ; if not, print and repeat
 
            inc $d020        ; increase bordercolor
-           jmp start        ; start over, comment out..
-           rts              ; if you want to go back to basic
+           jmp start        ; start over, or comment out ...
+           rts              ; ... if you want to go back to basic
 
-line1    !scr "]]]     the wanderer presents        ]]]"
-line2    !scr "       ]]] charset demo by tw ]]]       "
+; lines should be 40 cols wide (c64 screenwidth)
+line1    !scr "***     the wanderer presents        ***"
+line2    !scr "       *** charset demo by tw ***       "
 line3    !scr "bla, bla...                             "
 
 * = char_ram

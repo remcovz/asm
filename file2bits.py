@@ -13,7 +13,7 @@ if strip > 0:
 
 byte = f.read(1)
 
-charcount = 1
+charcount = 0
 while byte != '':
   print '; -- char #%d --' % (charcount)
   for count in range(0,8):

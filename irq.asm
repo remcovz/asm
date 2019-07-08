@@ -33,10 +33,10 @@ irq:
    nop
 
    lda $d020       ; Get background color
-   sta bg          ; And save it.
+   pha             ; And save it (push it to the Stack).
 
    lda $d021       ; Get foreground color
-   sta fg          ; And save it.
+   pha             ; And save it (also push it to the Stack).
 
    inc $d020       ; bgcolor +1
    lda $d020       ; Get new color
@@ -61,20 +61,14 @@ irq:
    dex             ; a half millisecond.
    bne *-1
    
-   lda bg          ; Get original background color.
-   sta $d020       ; Set original background color.
-   lda fg          ; Get original foreground color.
+   pla             ; Pull original foreground color from the Stack.
    sta $d021       ; Set original foreground color.
+   pla             ; Pull original background color from the Stack.
+   sta $d020       ; Set original background color.
 
    asl $d019       ; "Acknowledge" the interrupt by clearing the 
                    ; VIC's interrupt flag.
 
    jmp $ea31       ; Jump into KERNAL's standard interrupt service 
                    ; routine to handle keyboard scan, cursor display etc.
-
-bg:
-   !byte $00       ; Byte assigned to save the background color.
-
-fg:
-   !byte $00       ; Byte assigned to save the foreground color.
 

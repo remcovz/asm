@@ -45,7 +45,7 @@ irq:
 
    ldx #88         ; Empty loop that "does nothing" for a little under 
    dex             ; a half millisecond.
-   bne *-1         ; (heigth of horizontal bar)
+   bne *-1         ; (height of horizontal bar)
 
    inc $d020       ; Increase background color
    inc $d021       ; Increase foreground color
@@ -62,13 +62,13 @@ irq:
    bne *-1
    
    pla             ; Pull original foreground color from the Stack.
-   sta $d021       ; Set original foreground color.
+   sta $d021       ; Set foreground color.
    pla             ; Pull original background color from the Stack.
-   sta $d020       ; Set original background color.
+   sta $d020       ; Set background color.
 
    asl $d019       ; "Acknowledge" the interrupt by clearing the 
                    ; VIC's interrupt flag.
 
    jmp $ea31       ; Jump into KERNAL's standard interrupt service 
-                   ; routine to handle keyboard scan, cursor display etc.
+                   ; routine to handle keyboard scan, cursor display, etc.
 
